@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/view/ClienteView.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/view/LoginView.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/view/SistemaView.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/view/PesquisaView.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/model/Login.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/exceptions/StandartException.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/util/ConnectionFactory.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/model/Cliente.java</file>
+        </group>
+    </open-files>
+</project-private>
