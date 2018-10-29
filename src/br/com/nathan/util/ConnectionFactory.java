@@ -17,10 +17,10 @@ import javax.swing.JOptionPane;
  */
 public class ConnectionFactory {
     public static final String url = "jdbc:mysql://localhost:3306/Controle";
-    public static final String usuario = "admin";
-    public static final String senha = "root";
+    public static final String usuario = "root";
+    public static final String senha = "admin";
     
-    public Connection getConnection(){
+    public static Connection getConnection(){
         
         try{
             return DriverManager.getConnection(url, usuario, senha);

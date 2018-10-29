@@ -5,6 +5,14 @@
  */
 package br.com.nathan.view;
 
+import br.com.nathan.controller.LoginController;
+import br.com.nathan.model.Login;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Nathan
@@ -16,6 +24,7 @@ public class LoginView extends javax.swing.JFrame {
      */
     public LoginView() {
         initComponents();
+        setLocationRelativeTo( null );
     }
 
     /**
@@ -31,10 +40,12 @@ public class LoginView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnLimpar = new javax.swing.JButton();
         btnLogin = new javax.swing.JButton();
-        tstUsuario = new javax.swing.JTextField();
+        txtUsuario = new javax.swing.JTextField();
         txtSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login");
+        setResizable(false);
 
         jLabel1.setText("Usuário:");
 
@@ -43,6 +54,11 @@ public class LoginView extends javax.swing.JFrame {
         btnLimpar.setText("Limpar");
 
         btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -58,7 +74,7 @@ public class LoginView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
-                            .addComponent(tstUsuario)))
+                            .addComponent(txtUsuario)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnLimpar)
                         .addGap(38, 38, 38)
@@ -74,7 +90,7 @@ public class LoginView extends javax.swing.JFrame {
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(tstUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -88,6 +104,41 @@ public class LoginView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        String login = txtUsuario.getText();
+        char[] senha = txtSenha.getPassword();
+        Boolean verificacao = false;
+
+        try {
+            LoginController lc = new LoginController();
+            List<Login> ListaLogin = lc.buscarLoginSenha();
+
+            for (Login l : ListaLogin) {
+                if (l.getLogin().equalsIgnoreCase(login)
+                        && l.getSenha().equalsIgnoreCase(new String(senha))) {
+                    verificacao = true;
+                    this.dispose();
+                    SistemaView s = new SistemaView();
+                    s.setVisible(true);
+                    s.setLocationRelativeTo(null);
+                }
+            }
+            if (verificacao == false) {
+                JOptionPane.showMessageDialog(null, "Favor, verifique login e senha",
+                        "Erro", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados\n"+
+                    ex.getMessage(),
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Classe não encontrada\n"+
+                    ex.getMessage(),
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -129,7 +180,7 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField tstUsuario;
     private javax.swing.JPasswordField txtSenha;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
