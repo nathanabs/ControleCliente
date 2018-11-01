@@ -5,6 +5,8 @@
  */
 package br.com.nathan.view;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Nathan
@@ -39,6 +41,11 @@ public class SistemaView extends javax.swing.JFrame {
         jMenu1.setText("Cadastros");
 
         menuCadCliente.setText("Cliente");
+        menuCadCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadClienteActionPerformed(evt);
+            }
+        });
         jMenu1.add(menuCadCliente);
 
         jMenuBar1.add(jMenu1);
@@ -46,11 +53,26 @@ public class SistemaView extends javax.swing.JFrame {
         menuPesqCliente.setText("Pesquisar");
 
         jMenuItem2.setText("Cliente");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         menuPesqCliente.add(jMenuItem2);
 
         jMenuBar1.add(menuPesqCliente);
 
         menuSair.setText("Sair");
+        menuSair.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuSairMouseClicked(evt);
+            }
+        });
+        menuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSairActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(menuSair);
 
         setJMenuBar(jMenuBar1);
@@ -68,6 +90,32 @@ public class SistemaView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void menuCadClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadClienteActionPerformed
+        ClienteView v = new ClienteView();
+        v.setVisible(true);
+        v.setLocationRelativeTo(null);
+    }//GEN-LAST:event_menuCadClienteActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        PesquisaView p = new PesquisaView();
+        p.setVisible(true);
+        p.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSairActionPerformed
+        
+    }//GEN-LAST:event_menuSairActionPerformed
+
+    private void menuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSairMouseClicked
+        String msg = "Deseja sair da aplicação?";
+        
+        int opcao = JOptionPane.showConfirmDialog(null, msg, "Sair", JOptionPane.YES_NO_OPTION);
+        
+        if (opcao == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_menuSairMouseClicked
 
     /**
      * @param args the command line arguments

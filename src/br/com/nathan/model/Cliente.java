@@ -19,26 +19,43 @@ public class Cliente {
     private String sexo;
     private Date data_nasc;
     private String telefone;
+    private String endereco;
+    
 
     public Cliente() {
     }
 
-    public Cliente(int id, String nome, String cpf, String sexo, Date data_nasc) {
-        this.id = id;
+    public Cliente(String nome, String cpf, Date data_nasc, String telefone, String endereco) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.data_nasc = data_nasc;
+        this.telefone = telefone;
+        this.endereco = endereco;
+    }
+
+    
+    
+    public Cliente(String nome, String cpf, String sexo, Date data_nasc, String telefone, String endereco) {
         this.nome = nome;
         this.cpf = cpf;
         this.sexo = sexo;
         this.data_nasc = data_nasc;
+        this.telefone = telefone;
+        this.endereco = endereco;
     }
 
-    public Cliente(int id, String nome, String cpf, String sexo, Date data_nasc, String telefone) {
+    public Cliente(int id, String nome, String cpf, String sexo, Date data_nasc, String telefone, String endereco) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.sexo = sexo;
         this.data_nasc = data_nasc;
         this.telefone = telefone;
+        this.endereco = endereco;
     }
+
+    
+    
 
     public int getId() {
         return id;
@@ -87,6 +104,16 @@ public class Cliente {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+    
+    
 
     @Override
     public int hashCode() {
