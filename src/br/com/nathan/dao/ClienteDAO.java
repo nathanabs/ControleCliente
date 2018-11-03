@@ -46,8 +46,25 @@ public class ClienteDAO  extends DAO<Cliente>{
     }
 
     @Override
-    public boolean atualizar(Cliente pojo) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean atualizar(Cliente cliente) throws SQLException {
+        String sql = "update cliente set nome = ?, cpf = ?, sexo = ?, data_nasc = ?,"
+                +" telefone = ?, endereco = ? where id = ?";
+        
+        try(Connection conn = this.obterConexao(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, cliente.getNome());
+            ps.setString(2, cliente.getCpf());
+            ps.setString(3, cliente.getSexo());
+            ps.setDate(4, cliente.getData_nasc());
+            ps.setString(5, cliente.getTelefone());
+            ps.setString(6, cliente.getEndereco());
+            ps.setInt(7, cliente.getId());
+            
+            ps.executeUpdate();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "Erro: "+e, "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     @Override

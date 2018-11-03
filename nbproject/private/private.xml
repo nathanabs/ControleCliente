@@ -5,6 +5,8 @@
         <group>
             <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/view/ClienteView.java</file>
             <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/dao/ClienteDAO.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/view/LoginView.java</file>
+            <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/view/SistemaView.java</file>
             <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/controller/ClienteController.java</file>
             <file>file:/D:/Udemy%20java/ControleCliente/src/br/com/nathan/model/Cliente.java</file>
         </group>

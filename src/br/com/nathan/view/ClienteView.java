@@ -6,19 +6,15 @@
 package br.com.nathan.view;
 
 import br.com.nathan.controller.ClienteController;
-import br.com.nathan.dao.ClienteDAO;
 import br.com.nathan.model.Cliente;
-import br.com.nathan.util.ConnectionFactory;
 import br.com.nathan.util.OperacoesCRUD;
-import java.sql.Connection;
+import br.com.nathan.util.Util;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,6 +27,9 @@ public class ClienteView extends javax.swing.JFrame {
     public String sexo;
     private DefaultTableModel model;
 
+    private Integer codigo;
+    private String nomeCliente;
+
     /**
      * Creates new form ClienteView
      */
@@ -40,6 +39,7 @@ public class ClienteView extends javax.swing.JFrame {
         panelBotoesAcao.setVisible(false);
         carregarDadosTabela();
         fecharCampos();
+
     }
 
     /**
@@ -97,6 +97,11 @@ public class ClienteView extends javax.swing.JFrame {
         });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnSair.setText("Sair");
 
@@ -309,6 +314,11 @@ public class ClienteView extends javax.swing.JFrame {
                 "Codigo", "Nome", "CPF", "Sexo:", "Data Nascimento", "Telefone"
             }
         ));
+        tabelaCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaClienteMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaCliente);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -340,25 +350,64 @@ public class ClienteView extends javax.swing.JFrame {
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         operacao = OperacoesCRUD.NOVO.getOperacao();
+        btnNovo.setEnabled(false);
         btnEditar.setEnabled(false);
         btnExcluir.setEnabled(false);
         btnAtualizar.setVisible(false);
         panelBotoesAcao.setVisible(true);
+        btnSalvar.setVisible(true);
         abrirCampos();
-
+        limparCampos();
 
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         operacao = OperacoesCRUD.EDITAR.getOperacao();
+
+        if (tabelaCliente.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Tabela vazia.", "Erro",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (tabelaCliente.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione um cliente para editar.",
+                    "Erro", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        btnNovo.setEnabled(false);
+        btnEditar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnAtualizar.setVisible(true);
+        panelBotoesAcao.setVisible(true);
+        btnSalvar.setVisible(false);
+        abrirCampos();
+
+        if (txtNome.getText().equals("")) {
+            preencherFormComDadosDaTabela();
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         gravarAtualizarDados();
+        limparCampos();
+        fecharCampos();
+        btnNovo.setEnabled(true);
+        btnEditar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        panelBotoesAcao.setVisible(false);
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
         gravarAtualizarDados();
+        fecharCampos();
+        JOptionPane.showMessageDialog(null, "Atualizado com sucesso",
+                "Atualização", JOptionPane.INFORMATION_MESSAGE);
+        
+        panelBotoesAcao.setVisible(false);
+        btnEditar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        btnNovo.setEnabled(true);
+        
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -367,6 +416,7 @@ public class ClienteView extends javax.swing.JFrame {
         btnEditar.setEnabled(true);
         btnExcluir.setEnabled(true);
         btnAtualizar.setVisible(true);
+        btnNovo.setEnabled(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void rbMasculinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbMasculinoActionPerformed
@@ -378,6 +428,51 @@ public class ClienteView extends javax.swing.JFrame {
         rbMasculino.setSelected(false);
         sexo = rbFeminino.getText();
     }//GEN-LAST:event_rbFemininoActionPerformed
+
+    private void tabelaClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaClienteMouseClicked
+        panelBotoesAcao.setVisible(false);
+        btnSalvar.setVisible(false);
+        btnNovo.setEnabled(true);
+        btnEditar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        btnAtualizar.setVisible(true);
+        fecharCampos();
+
+        //recupera as informações da tabela
+        ListSelectionModel tableSelectionModel = tabelaCliente.getSelectionModel();
+
+        //refresh - limpeza do cache da tabela
+        tabelaCliente.setSelectionModel(tableSelectionModel);
+
+        //armazena  a linha selecionada nas vaiaveis
+        setCodigo(Integer.parseInt(tabelaCliente.getValueAt(tabelaCliente.
+                getSelectedRow(), 0).toString()));
+
+        setNomeCliente(tabelaCliente.getValueAt(tabelaCliente.getSelectedRow(), 1).toString());
+
+        preencherFormComDadosDaTabela();
+
+
+    }//GEN-LAST:event_tabelaClienteMouseClicked
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        if (tabelaCliente.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Tabela vazia.", "Erro",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (tabelaCliente.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione um cliente para editar.",
+                    "Erro", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        btnNovo.setEnabled(true);
+        btnEditar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        panelBotoesAcao.setVisible(false);
+        
+        excluirDados();
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -451,6 +546,10 @@ public class ClienteView extends javax.swing.JFrame {
         String telefone = txtTelefone.getText();
         String endereco = txtEndereco.getText();
 
+        if (sexo == null) {
+            sexoSelecionado();
+        }
+
         Cliente cliente = new Cliente(nome, cpf, formatarCampoSexo(sexo), dataNasc, telefone, endereco);
 
         ClienteController clienteController = new ClienteController();
@@ -468,6 +567,15 @@ public class ClienteView extends javax.swing.JFrame {
             }
 
             if (operacao == OperacoesCRUD.EDITAR.getOperacao()) {
+
+                cliente.setId(getCodigo());
+                clienteController.atualizar(cliente);
+
+                model.setValueAt(nome, tabelaCliente.getSelectedRow(), 1);
+                model.setValueAt(cpf, tabelaCliente.getSelectedRow(), 2);
+                model.setValueAt(sexo, tabelaCliente.getSelectedRow(), 3);
+                model.setValueAt(dataNasc, tabelaCliente.getSelectedRow(), 4);
+                model.setValueAt(telefone, tabelaCliente.getSelectedRow(), 5);
 
                 return;
             }
@@ -495,7 +603,6 @@ public class ClienteView extends javax.swing.JFrame {
         txtTelefone.setEnabled(true);
         rbFeminino.setEnabled(true);
         rbMasculino.setEnabled(true);
-        limparCampos();
     }
 
     private void limparCampos() {
@@ -520,7 +627,7 @@ public class ClienteView extends javax.swing.JFrame {
     private void carregarDadosTabela() {
         ClienteController clienteCon = new ClienteController();
         List<Cliente> lista = clienteCon.listar();
-        
+
         tabelaCliente.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabelaCliente.getColumnModel().getColumn(0).setPreferredWidth(50);
         tabelaCliente.getColumnModel().getColumn(1).setPreferredWidth(160);
@@ -541,11 +648,73 @@ public class ClienteView extends javax.swing.JFrame {
             } else {
                 sexo = "Feminino";
             }
-            Date nasc = c.getData_nasc();
+            String nasc = Util.converterToString(c.getData_nasc());
             String telefone = c.getTelefone();
 
             model.addRow(new Object[]{codigo, nome, cpf, sexo, nasc, telefone});
         }
 
     }
+
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+    }
+
+    private void getSexoSelecionado(String rowSexo) {
+        if (rowSexo.equals("M")) {
+            rbMasculino.setSelected(true);
+            rbFeminino.setSelected(false);
+        } else {
+            rbMasculino.setSelected(false);
+            rbFeminino.setSelected(true);
+        }
+    }
+
+    private void preencherFormComDadosDaTabela() {
+        ClienteController clienteCon = new ClienteController();
+        List<Cliente> lista = clienteCon.listar();
+
+        for (Cliente c : lista) {
+            if (c.getId() == codigo) {
+                txtEndereco.setText(c.getEndereco());
+                txtNome.setText(c.getNome());
+                txtCpf.setText(c.getCpf());
+                txtDataNasc.setDate(c.getData_nasc());
+                txtTelefone.setText(c.getTelefone());
+                getSexoSelecionado(c.getSexo());
+            }
+        }
+    }
+
+    private void sexoSelecionado() {
+        if (!rbFeminino.isSelected()) {
+            sexo = rbMasculino.getText();
+        } else if (!rbMasculino.isSelected()) {
+            sexo = rbFeminino.getText();
+        } else {
+         JOptionPane.showMessageDialog(null, "Selecione um sexo.",
+                 "Informação", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void excluirDados() {
+        String msg = "Deseja excluir o cliente "+getNomeCliente()+"?";
+        int opcao = JOptionPane.showConfirmDialog(null, msg, "Excluir", JOptionPane.OK_CANCEL_OPTION);
+        if (opcao == JOptionPane.OK_OPTION) {
+            
+        }
+    }
+
 }

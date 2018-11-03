@@ -5,6 +5,7 @@
  */
 package br.com.nathan.view;
 
+import br.com.nathan.model.Login;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +19,7 @@ public class SistemaView extends javax.swing.JFrame {
      */
     public SistemaView() {
         initComponents();
+
     }
 
     /**
