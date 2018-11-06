@@ -68,8 +68,18 @@ public class ClienteDAO  extends DAO<Cliente>{
     }
 
     @Override
-    public boolean excluir(Cliente pojo) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean excluir(Cliente cliente) throws SQLException {
+        String sql = "delete from cliente where id = ?";
+        
+        try(Connection conn = this.obterConexao(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, cliente.getId());
+            ps.executeUpdate();
+            
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "Erro: "+e, "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     @Override

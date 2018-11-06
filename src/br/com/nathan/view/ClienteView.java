@@ -713,7 +713,22 @@ public class ClienteView extends javax.swing.JFrame {
         String msg = "Deseja excluir o cliente "+getNomeCliente()+"?";
         int opcao = JOptionPane.showConfirmDialog(null, msg, "Excluir", JOptionPane.OK_CANCEL_OPTION);
         if (opcao == JOptionPane.OK_OPTION) {
+            Cliente cliente = new Cliente();
+            cliente.setId(getCodigo());
+            cliente.setNome(getNomeCliente());
             
+            try {
+                ClienteController clienteController = new ClienteController();
+                clienteController.excluir(cliente);
+                
+                model.removeRow(tabelaCliente.getSelectedRow());
+                limparCampos();
+                
+                JOptionPane.showMessageDialog(null, "O cliente " + cliente.getNome()
+                        + " foi excluído com sucesso",
+                 "Informação", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
+            }
         }
     }
 

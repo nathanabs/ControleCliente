@@ -45,8 +45,15 @@ public class ClienteController extends DAO<Cliente>{
     }
 
     @Override
-    public boolean excluir(Cliente pojo) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean excluir(Cliente cliente) throws SQLException {
+         boolean resultado = false;
+        
+        ClienteDAO clienteDAO = new ClienteDAO();
+        
+        if (clienteDAO.excluir(cliente)) {
+            resultado = true;
+        }
+        return resultado;
     }
 
     @Override
